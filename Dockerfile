@@ -15,10 +15,11 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install my custom repository with mining Debian packages
-# and then install ccminer (without CUDA dependencies, this will be handled by nvidia-docker
+# and then install ccminer (without CUDA dependency, this will be handled by nvidia-docker)
 COPY fake-cuda-deps-for-nvidia-docker_1.0_all.deb /tmp/
 RUN wget -O - https://packages.le-vert.net/packages.le-vert.net.gpg.key | apt-key add - \
     && echo "deb http://packages.le-vert.net/mining/debian stretch main" > /etc/apt/sources.list.d/packages_le_vert_net_php5_fpm_squeeze.list \
+    && echo "deb http://deb.debian.org/debian stretch contrib non-free" >> /etc/apt/sources.list \
     && apt update \
     && dpkg -i /tmp/fake-cuda-deps-for-nvidia-docker_1.0_all.deb && rm -f /tmp/fake-cuda-deps-for-nvidia-docker_1.0_all.deb \
     && apt-get -y -o 'Dpkg::Options::=--force-confdef' -o 'Dpkg::Options::=--force-confold' --no-install-recommends --ignore-missing install ccminer-tpruvot \

@@ -29,18 +29,36 @@ nvidia-docker run -it --rm earthlablux/cuda-ccminer /usr/bin/ccminer --help
 
 An example command line to mine Groestl on MiningPoolHub (ccminer supports nearly all algorythm so check its documentation and picks what you want):
 ```
-nvidia-docker run -it --rm --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -x 1 --failover-only -o us-east1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x 
+nvidia-docker run -it --rm -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
 ```
 
 Ouput will looks like:
 ```
+*** ccminer 2.2.3 for nVidia GPUs by tpruvot@github ***
+    Built with the nVidia CUDA Toolkit 8.0 64-bits
+
+  Originally based on Christian Buchner and Christian H. project
+  Include some kernels from alexis78, djm34, djEzo, tsiv and krnlx.
+
+BTC donation address: 1AJdfCpLWPNoAMDfHF1wD5y8VgKSSTHxPo (tpruvot)
+
+[2017-12-05 23:15:44] 1 miner thread started, using 'groestl' algorithm.
+[2017-12-05 23:15:44] Starting on stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486
+[2017-12-05 23:15:44] Stratum difficulty set to 5 (0.01953)
+[2017-12-05 23:15:44] GPU #0: Intensity set to 19, 524288 cuda threads
+[2017-12-05 23:15:45] API open in full access mode to 0/0 on port 4068
+[2017-12-05 23:15:49] GPU #0: GeForce GTX 1080 Ti, 26.08 MH/s
+[2017-12-05 23:15:51] accepted: 1/1 (diff 0.036), 26.51 MH/s yes!
+[2017-12-05 23:16:03] GPU #0: GeForce GTX 1080 Ti, 26.60 MH/s
+[2017-12-05 23:16:03] accepted: 2/2 (diff 0.065), 26.55 MH/s yes!
+[2017-12-05 23:16:04] accepted: 3/3 (diff 0.069), 26.58 MH/s yes!
 ```
 
 
 ## Background job running forever
 
 ```
-nvidia-docker run -dt --restart=always --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -x 1 --failover-only -o us-east1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x
+nvidia-docker run -dt --restart=always -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
 ```
 
 You can check the output using `docker logs cuda-grs-ccminer -f` 
@@ -58,6 +76,23 @@ curl -X PUT -u marathon\_username:marathon\_password --header 'Content-Type: app
 You can check CUDA usage on the mesos slave (executor host) by running `nvidia-smi` there:
 
 ```
+Wed Dec  6 00:21:09 2017       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 375.82                 Driver Version: 375.82                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 108...  On   | 0000:82:00.0     Off |                  N/A |
+| 51%   67C    P2   197W / 200W |   1729MiB / 11172MiB |     98%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID  Type  Process name                               Usage      |
+|=============================================================================|
+|    0     21474    C   /usr/bin/ccminer                              1729MiB |
++-----------------------------------------------------------------------------+
 ```
 
 [Tpruvot CCMiner]: https://github.com/tpruvot/ccminer

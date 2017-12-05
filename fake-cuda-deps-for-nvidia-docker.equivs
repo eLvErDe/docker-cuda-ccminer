@@ -9,7 +9,7 @@ Maintainer: Adam Cecile <acecile@le-vert.net>
 # Depends: <comma-separated list of packages>
 # Recommends: <comma-separated list of packages>
 # Suggests: <comma-separated list of packages>
-Provides: libcuda1 (= 270), libcudart8.0 (= 5.0)
+Provides: libcuda1 (= 270)
 # Replaces: <comma-separated list of packages>
 # Architecture: all
 # Multi-Arch: <one of: foreign|same|allowed>
