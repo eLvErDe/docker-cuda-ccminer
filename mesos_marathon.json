@@ -1,0 +1,16 @@
+{
+  "id": "/mining/cuda-ccminer",
+  "cmd": "/usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -x 1 --failover-only -o us-east1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x",
+  "cpus": 0.1,
+  "gpus": 1,
+  "mem": 128,
+  "disk": 5000,
+  "instances": 1,
+  "container": {
+    "type": "MESOS",
+    "docker": {
+      "image": "earthlablux/cuda-ccminer:latest",
+      "forcePullImage": true
+    }
+  }
+}
