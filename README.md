@@ -5,12 +5,29 @@ It requires a CUDA compatible docker implementation so you should probably go
 for [nvidia-docker].
 It has also been tested successfully on [Mesos] 1.2.1.
 
+## compute52 variant
+
+According to [djm34] Lyra2Z (at least) is way faster if CUDA compute level is limited to 5.2 instead of enable all features for recents CPUs.
+
+So in my mining packages repository, I provide two flavors of ccminer-tpruvot packages.
+The second one is ccminer-tpruvot-compute52 that can be turned into a CUDA docker image by building Dockerfile.compute52 (see below).
+
+For instance, here are a few benchmarks when mining Zcoin (XZC) zith cuda-ccminer or cuda-ccminer-compute52 images:
+
+|                          | cuda-ccminer | cuda-ccminer-compute52 |
+|--------------------------|--------------|------------------------|
+| GTX1070                  | 1275 kH/s    | 1496 kH/s              |
+| GTX1080                  | 1593 kH/s    | 1871 kH/s              |
+| GTX1080 (another)        | 1651 kH/s    | 1932 kH/s              |
+| GTX1080Ti (PwrLimit 200) | 2352 kH/s    | 2746 kH/s              |
+
 ## Build images
 
 ```
 git clone https://github.com/EarthLab-Luxembourg/docker-cuda-ccminer
 cd docker-cuda-ccminer
 docker build -t cuda-ccminer .
+docker build . -t cuda-ccminer-compute52 -f Dockerfile.compute52
 ```
 
 ## Publish it somewhere
@@ -18,6 +35,7 @@ docker build -t cuda-ccminer .
 ```
 docker tag cuda-ccminer docker.domain.com/mining/cuda-ccminer
 docker push docker.domain.com/mining/cuda-ccminer
+
 ```
 
 ## Test it (using dockerhub published image)
@@ -99,3 +117,4 @@ Wed Dec  6 00:21:09 2017
 [Debian/Ubuntu mining packages repository]: https://packages.le-vert.net/mining/
 [nvidia-docker]: https://github.com/NVIDIA/nvidia-docker
 [Mesos]: http://mesos.apache.org/documentation/latest/gpu-support/
+[djm34]: https://github.com/djm34/ccminer-msvc2015/releases
