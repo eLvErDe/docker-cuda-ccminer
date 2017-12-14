@@ -21,6 +21,8 @@ For instance, here are a few benchmarks when mining Zcoin (XZC) zith cuda-ccmine
 | GTX1080 (another)        | 1651 kH/s    | 1932 kH/s              |
 | GTX1080Ti (PwrLimit 200) | 2352 kH/s    | 2746 kH/s              |
 
+Speaking about Lyra2Z, please run ccminer with `--submit-stale` otherwise you will loose nearly half of your hashrate !
+
 ## Build images
 
 ```
