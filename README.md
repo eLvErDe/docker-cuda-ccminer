@@ -76,7 +76,7 @@ BTC donation address: 1AJdfCpLWPNoAMDfHF1wD5y8VgKSSTHxPo (tpruvot)
 ## Background job running forever
 
 ```
-nvidia-docker run -dt --restart=always -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
+nvidia-docker run -dt --restart=unless-stopped -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
 ```
 
 You can check the output using `docker logs cuda-grs-ccminer -f` 
