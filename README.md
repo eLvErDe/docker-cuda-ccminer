@@ -5,7 +5,7 @@ It requires a CUDA compatible docker implementation so you should probably go
 for [nvidia-docker].
 It has also been tested successfully on [Mesos] 1.2.1.
 
-## compute52 variant
+## compute52 - cuda9 variants
 
 According to [djm34] Lyra2Z (at least) is way faster if CUDA compute level is limited to 5.2 instead of enable all features for recents CPUs.
 
@@ -23,6 +23,21 @@ For instance, here are a few benchmarks when mining Zcoin (XZC) zith cuda-ccmine
 
 Speaking about Lyra2Z, please run ccminer with `--submit-stale` otherwise you will loose nearly half of your hashrate !
 
+Also, if you are running NVIDIA driver >= 384.81, you can use CUDA 9 variants :-)
+It's usually faster:
+
+|                              | GTX1080 / XZC |
+|------------------------------|---------------|
+| Regular build (CUDA 8)       | 1634 kH/s     |
+| CUDA level 5.2 only (CUDA 8) | 1915 kH/s     |
+| Regular build (CUDA 9)       | 2151 kH/s     |
+| UDA level 5.2 only (CUDA 9)  | 2153 kH/s     |
+
+This is probably highly related to the cypher, in the example above you can see there was clearly something wrong for this crypto with compute level > 5.2. The "bug" has been fixed in CUDA 9 which, by the way, give an additional hashrate boost.
+
+I'd be very happy to add your own hashrates here if you do some testing !
+
+
 ## Build images
 
 ```
@@ -30,6 +45,9 @@ git clone https://github.com/EarthLab-Luxembourg/docker-cuda-ccminer
 cd docker-cuda-ccminer
 docker build -t cuda-ccminer .
 docker build . -t cuda-ccminer-compute52 -f Dockerfile.compute52
+docker build . -t cuda-ccminer-cuda9 -f Dockerfile.cuda9
+docker build . -t cuda-ccminer-cuda9-compute52 -f Dockerfile.cuda9.compute52
+
 ```
 
 ## Publish it somewhere
