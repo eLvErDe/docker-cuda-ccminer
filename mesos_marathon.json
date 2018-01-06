@@ -9,7 +9,7 @@
   "container": {
     "type": "MESOS",
     "docker": {
-      "image": "earthlablux/cuda-ccminer:latest",
+      "image": "acecile/cuda-ccminer:latest",
       "forcePullImage": true
     }
   }
