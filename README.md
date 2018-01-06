@@ -41,7 +41,7 @@ I'd be very happy to add your own hashrates here if you do some testing !
 ## Build images
 
 ```
-git clone https://github.com/EarthLab-Luxembourg/docker-cuda-ccminer
+git clone https://github.com/eLvErDe/docker-cuda-ccminer
 cd docker-cuda-ccminer
 docker build -t cuda-ccminer .
 docker build . -t cuda-ccminer-compute52 -f Dockerfile.compute52
@@ -61,13 +61,13 @@ docker push docker.domain.com/mining/cuda-ccminer
 ## Test it (using dockerhub published image)
 
 ```
-nvidia-docker pull earthlablux/cuda-ccminer:latest
-nvidia-docker run -it --rm earthlablux/cuda-ccminer /usr/bin/ccminer --help
+nvidia-docker pull acecile/cuda-ccminer:latest
+nvidia-docker run -it --rm acecile/cuda-ccminer /usr/bin/ccminer --help
 ```
 
 An example command line to mine Groestl on MiningPoolHub (ccminer supports nearly all algorythm so check its documentation and picks what you want):
 ```
-nvidia-docker run -it --rm -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
+nvidia-docker run -it --rm -p 4068:4068 --name cuda-grs-ccminer acecile/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
 ```
 
 Ouput will looks like:
@@ -96,7 +96,7 @@ BTC donation address: 1AJdfCpLWPNoAMDfHF1wD5y8VgKSSTHxPo (tpruvot)
 ## Background job running forever
 
 ```
-nvidia-docker run -dt --restart=unless-stopped -p 4068:4068 --name cuda-grs-ccminer earthlablux/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
+nvidia-docker run -dt --restart=unless-stopped -p 4068:4068 --name cuda-grs-ccminer acecile/cuda-ccminer /usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:4068 --api-allow=0/0
 ```
 
 You can check the output using `docker logs cuda-grs-ccminer -f` 
