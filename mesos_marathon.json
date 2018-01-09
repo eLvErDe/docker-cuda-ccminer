@@ -1,6 +1,6 @@
 {
   "id": "/mining/cuda-ccminer",
-  "cmd": "/usr/bin/ccminer -a groestl -o stratum+tcp://europe1.groestlcoin.miningpoolhub.com:20486 -u acecile.catch-all -p x --api-bind=0.0.0.0:$PORT0 --api-allow=0/0",
+  "cmd": "/usr/bin/ccminer -a equihash -o stratum+tcp://europe.equihash-hub.miningpoolhub.com:20575 -u acecile.catchall -p x --api-bind=0.0.0.0:4068 --api-allow=0/0",
   "cpus": 0.1,
   "gpus": 1,
   "mem": 128,
@@ -9,7 +9,7 @@
   "container": {
     "type": "MESOS",
     "docker": {
-      "image": "acecile/cuda-ccminer:latest",
+      "image": "acecile/cuda-ccminer-cuda9:latest",
       "forcePullImage": true
     }
   }
