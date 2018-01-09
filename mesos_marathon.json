@@ -12,5 +12,8 @@
       "image": "acecile/cuda-ccminer-cuda9:latest",
       "forcePullImage": true
     }
+  },
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0
   }
 }
