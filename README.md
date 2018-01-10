@@ -5,7 +5,7 @@ It requires a CUDA compatible docker implementation so you should probably go
 for [nvidia-docker].
 It has also been tested successfully on [Mesos] 1.2.1.
 
-## compute52 - cuda9 variants
+## compute52 - cuda9 variants - klaust
 
 According to [djm34] Lyra2Z (at least) is way faster if CUDA compute level is limited to 5.2 instead of enable all features for recents CPUs.
 
@@ -37,6 +37,7 @@ This is probably highly related to the cypher, in the example above you can see 
 
 I'd be very happy to add your own hashrates here if you do some testing !
 
+I also provide a package (and a docker image) for [KlausT] fork which is actively developped as well. CUDA >= 9.0 because he's dropping previous support anyway (but again, you don't need to have CUDA 9 on the host, the only requirement is to have driver >= 384).
 
 ## Build images
 
@@ -47,6 +48,7 @@ docker build -t cuda-ccminer .
 docker build . -t cuda-ccminer-compute52 -f Dockerfile.compute52
 docker build . -t cuda-ccminer-cuda9 -f Dockerfile.cuda9
 docker build . -t cuda-ccminer-cuda9-compute52 -f Dockerfile.cuda9.compute52
+docker build . -t cuda-ccminer-cuda9-klaust -f Dockerfile.cuda9.klaust
 
 ```
 
@@ -138,3 +140,4 @@ Wed Dec  6 00:21:09 2017
 [nvidia-docker]: https://github.com/NVIDIA/nvidia-docker
 [Mesos]: http://mesos.apache.org/documentation/latest/gpu-support/
 [djm34]: https://github.com/djm34/ccminer-msvc2015/releases
+[KlausT]: https://github.com/KlausT/ccminer
