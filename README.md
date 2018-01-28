@@ -39,14 +39,29 @@ I'd be very happy to add your own hashrates here if you do some testing !
 
 I also provide a package (and a docker image) for [KlausT] fork which is actively developped as well. CUDA >= 9.0 because he's dropping previous support anyway (but again, you don't need to have CUDA 9 on the host, the only requirement is to have driver >= 384).
 
+## -api variants
+
+A new variant is being introduced, only for tpruvot / tpruvot-cuda9 (I'll provide it for all images as soon as I do a full cleanup of Dockerfile + meta script for generating them).
+
+It provides the PHP files connecting the TCP api and embed Apache2+PHP as well as a Python wrapper I made myself to start both Apache2 and CCMiner.
+
+```
+nvidia-docker run -dt --restart=unless-stopped -p 4068:4068 -p 4069:4069 --name cuda-xvg-ccminer acecile/cuda-ccminer-cuda9-api /root/multi-process-launcher/multi-process-launcher.py --cmd '/root/start-apache2.sh 4068 4069' --cmd '/usr/bin/ccminer -a lyra2v2 -o stratum+tcp://xvg-lyra.suprnova.cc:2595 -u greenie.rig1 -p x --api-bind=0.0.0.0:4068 --api-allow=0/0'
+```
+
+You can now access status page at http://you.host:4069 and live hashrate graphs at http://you.host:4069/websocket.htm (yes, .htm it's not a typo).
+It's currently using modified version of the existing examples but I hope to get them merged soon in tpruvot's repository.
+
 ## Build images
 
 ```
 git clone https://github.com/eLvErDe/docker-cuda-ccminer
 cd docker-cuda-ccminer
 docker build -t cuda-ccminer .
+docker build . -t cuda-ccminer-api -f Dockerfile.api
 docker build . -t cuda-ccminer-compute52 -f Dockerfile.compute52
 docker build . -t cuda-ccminer-cuda9 -f Dockerfile.cuda9
+docker build . -t cuda-ccminer-cuda9-api -f Dockerfile.cuda9.api
 docker build . -t cuda-ccminer-cuda9-compute52 -f Dockerfile.cuda9.compute52
 docker build . -t cuda-ccminer-cuda9-klaust -f Dockerfile.cuda9.klaust
 
