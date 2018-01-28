@@ -56,6 +56,7 @@ RUN echo '#!/bin/sh' > /root/start-apache2.sh \
  && echo 'sed -i "s|4068|$1|" /var/www/html/websocket.htm' >> /root/start-apache2.sh \
  && echo 'sed -i "s|80|$2|" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf' >> /root/start-apache2.sh \
  && echo 'exec /usr/sbin/apache2ctl -D FOREGROUND' >> /root/start-apache2.sh \
+ && chmod 0755 /root/ \
  && chmod 0755 /root/start-apache2.sh
 
 
