@@ -1,6 +1,7 @@
 {
   "id": "/mining/cuda-ccminer-api",
   "cmd": "/root/multi-process-launcher/multi-process-launcher.py --cmd \"/root/start-apache2.sh $PORT1 $PORT0\" --cmd \"/usr/bin/ccminer -a equihash -o stratum+tcp://europe.equihash-hub.miningpoolhub.com:20575 -u acecile.catchall -p x --api-bind=0.0.0.0:$PORT1 --api-allow=0/0\"",
+  "user": "root",
   "cpus": 0.5,
   "gpus": 3,
   "mem": 512,
