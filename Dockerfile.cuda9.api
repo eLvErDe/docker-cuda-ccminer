@@ -45,9 +45,9 @@ RUN apt update \
 # TODO FIXME
 # Get them merged in tpruvot's GIT
 # Bundle API files into deb package for next release
-RUN wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-url-detection/api/index.php -O /var/www/html/index.php \
- && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-url-detection/api/local-sample.php -O /var/www/html/local-sample.php \
- && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-url-detection/api/url_origin.inc.php -O /var/www/html/url_origin.inc.php \
+RUN wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/index.php -O /var/www/html/index.php \
+ && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/local-sample.php -O /var/www/html/local-sample.php \
+ && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/url_origin.inc.php -O /var/www/html/url_origin.inc.php \
  && wget https://raw.githubusercontent.com/eLvErDe/ccminer/js-ws-detect-url/api/websocket.htm -O /var/www/html/websocket.htm \
  && rm /var/www/html/index.html
 
