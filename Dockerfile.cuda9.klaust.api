@@ -1,0 +1,73 @@
+FROM debian:stretch
+
+MAINTAINER Adam Cecile <acecile@le-vert.net>
+
+ENV TERM xterm
+ENV HOSTNAME cuda-ccminer.local
+ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /root
+
+# Upgrade base system and install wget to download GPG key
+RUN apt update \
+    && apt -y -o 'Dpkg::Options::=--force-confdef' -o 'Dpkg::Options::=--force-confold' dist-upgrade \
+    && apt-get -y -o 'Dpkg::Options::=--force-confdef' -o 'Dpkg::Options::=--force-confold' --no-install-recommends install wget ca-certificates gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install my custom repository with mining Debian packages
+# and then install ccminer (without CUDA dependency, this will be handled by nvidia-docker)
+COPY fake-cuda-deps-for-nvidia-docker_1.0_all.deb /tmp/
+RUN wget -O - https://packages.le-vert.net/packages.le-vert.net.gpg.key | apt-key add - \
+    && echo "deb http://packages.le-vert.net/mining/debian stretch cuda9" > /etc/apt/sources.list.d/packages_le_vert_net_mining.list \
+    && echo "deb http://deb.debian.org/debian stretch contrib non-free" >> /etc/apt/sources.list \
+    && apt update \
+    && dpkg -i /tmp/fake-cuda-deps-for-nvidia-docker_1.0_all.deb && rm -f /tmp/fake-cuda-deps-for-nvidia-docker_1.0_all.deb \
+    && apt-get -y -o 'Dpkg::Options::=--force-confdef' -o 'Dpkg::Options::=--force-confold' --no-install-recommends --ignore-missing install ccminer-klaust \
+    && rm -rf /var/lib/apt/lists/*
+
+# nvidia-container-runtime @ https://gitlab.com/nvidia/cuda/blob/ubuntu16.04/8.0/runtime/Dockerfile
+ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+
+
+########################################
+#      Apache2 + PHP + Wrapper         #
+# to provide HTTP API on a second port #
+########################################
+
+RUN apt update \
+ && apt -y --no-install-recommends install apache2 libapache2-mod-php \
+ && rm -rf /var/lib/apt/lists/*
+
+# TODO FIXME
+# Get them merged in tpruvot's GIT
+# Bundle API files into deb package for next release
+RUN wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/index.php -O /var/www/html/index.php \
+ && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/local-sample.php -O /var/www/html/local-sample.php \
+ && wget https://raw.githubusercontent.com/eLvErDe/ccminer/php-forward-authorzation/api/url_origin.inc.php -O /var/www/html/url_origin.inc.php \
+ && wget https://raw.githubusercontent.com/eLvErDe/ccminer/js-ws-detect-url/api/websocket.htm -O /var/www/html/websocket.htm \
+ && rm /var/www/html/index.html
+
+RUN echo '#!/bin/sh' > /root/start-apache2.sh \
+ && echo 'sed -i "s|4068|$1|" /var/www/html/local-sample.php' >> /root/start-apache2.sh \
+ && echo 'sed -i "s|4068|$1|" /var/www/html/websocket.htm' >> /root/start-apache2.sh \
+ && echo 'sed -i "s|80|$2|" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf' >> /root/start-apache2.sh \
+ && echo 'exec /usr/sbin/apache2ctl -D FOREGROUND' >> /root/start-apache2.sh \
+ && chmod 0755 /root/ \
+ && chmod 0755 /root/start-apache2.sh
+
+
+########################################
+# Install my Python launcher to start  #
+#     both ccminer and Apache2         #
+########################################
+
+RUN apt update \
+ && apt -y --no-install-recommends install git python3 python3-setproctitle \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/eLvErDe/multi-process-launcher.git /root/multi-process-launcher/ \
+ && chmod 0755 /root/multi-process-launcher/multi-process-launcher.py
