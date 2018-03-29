@@ -64,7 +64,7 @@ docker build . -t cuda-ccminer-cuda9 -f Dockerfile.cuda9
 docker build . -t cuda-ccminer-cuda9-api -f Dockerfile.cuda9.api
 docker build . -t cuda-ccminer-cuda9-compute52 -f Dockerfile.cuda9.compute52
 docker build . -t cuda-ccminer-cuda9-klaust -f Dockerfile.cuda9.klaust
-docker build . -t cuda-ccminer-cuda9-klaust.api -f Dockerfile.cuda9.klaust-api
+docker build . -t cuda-ccminer-cuda9-klaust-api -f Dockerfile.cuda9.klaust.api
 
 ```
 
